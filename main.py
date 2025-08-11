@@ -6,8 +6,28 @@ Combines data from both Jora and Seek portals into a single CSV file
 
 import pandas as pd
 import os
+import concurrent.futures
+import threading
 from src.jora_crawler import JoraCrawler
 from src.seek_crawler import SeekCrawler
+
+
+def scrape_portal(crawler, portal_name, max_pages):
+    """Scrape a single portal and return results"""
+    try:
+        print(f"\n{'='*60}")
+        print(f"STARTING {portal_name.upper()} SCRAPING")
+        print(f"{'='*60}")
+        jobs = crawler.scrape_jobs(max_pages=max_pages)
+        if jobs:
+            print(f"✓ {portal_name} scraping completed successfully. Jobs collected: {len(jobs)}")
+            return jobs
+        else:
+            print(f"✗ {portal_name} scraping failed or returned no data")
+            return []
+    except Exception as e:
+        print(f"✗ Error during {portal_name} scraping: {e}")
+        return []
 
 
 def main():
@@ -16,6 +36,7 @@ def main():
     print("=" * 60)
     print("This will scrape both Jora and Seek portals for sponsorship available jobs")
     print("All data will be combined into a single job_lists.csv file")
+    print("Both crawlers will run simultaneously for faster execution")
     print("=" * 60)
     
     # Initialize crawlers
@@ -24,33 +45,25 @@ def main():
     
     all_jobs_data = []
     
-    # Scrape Jora
+    # Run both crawlers concurrently
     print("\n" + "=" * 60)
-    print("STARTING JORA SCRAPING")
+    print("STARTING CONCURRENT SCRAPING")
+    print("Both Jora and Seek crawlers will run simultaneously")
     print("=" * 60)
-    try:
-        jora_jobs = jora_crawler.scrape_jobs(max_pages=1)
-        if jora_jobs:
-            all_jobs_data.extend(jora_jobs)
-            print(f"✓ Jora scraping completed successfully. Jobs collected: {len(jora_jobs)}")
-        else:
-            print("✗ Jora scraping failed or returned no data")
-    except Exception as e:
-        print(f"✗ Error during Jora scraping: {e}")
     
-    # Scrape Seek
-    print("\n" + "=" * 60)
-    print("STARTING SEEK SCRAPING")
-    print("=" * 60)
-    try:
-        seek_jobs = seek_crawler.scrape_jobs(max_pages=1)
-        if seek_jobs:
-            all_jobs_data.extend(seek_jobs)
-            print(f"✓ Seek scraping completed successfully. Jobs collected: {len(seek_jobs)}")
-        else:
-            print("✗ Seek scraping failed or returned no data")
-    except Exception as e:
-        print(f"✗ Error during Seek scraping: {e}")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+        # Submit both crawler tasks
+        jora_future = executor.submit(scrape_portal, jora_crawler, "Jora", 1)
+        seek_future = executor.submit(scrape_portal, seek_crawler, "Seek", 1)
+        
+        # Wait for both to complete and collect results
+        for future in concurrent.futures.as_completed([jora_future, seek_future]):
+            try:
+                jobs = future.result()
+                if jobs:
+                    all_jobs_data.extend(jobs)
+            except Exception as e:
+                print(f"✗ Thread execution error: {e}")
     
     # Combine and save data
     if all_jobs_data:
