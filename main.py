@@ -20,13 +20,13 @@ def scrape_portal(crawler, portal_name, max_pages):
         print(f"{'='*60}")
         jobs = crawler.scrape_jobs(max_pages=max_pages)
         if jobs:
-            print(f"✓ {portal_name} scraping completed successfully. Jobs collected: {len(jobs)}")
+            print(f"{portal_name} scraping completed successfully. Jobs collected: {len(jobs)}")
             return jobs
         else:
-            print(f"✗ {portal_name} scraping failed or returned no data")
+            print(f" {portal_name} scraping failed or returned no data")
             return []
     except Exception as e:
-        print(f"✗ Error during {portal_name} scraping: {e}")
+        print(f"Error during {portal_name} scraping: {e}")
         return []
 
 
@@ -63,7 +63,7 @@ def main():
                 if jobs:
                     all_jobs_data.extend(jobs)
             except Exception as e:
-                print(f"✗ Thread execution error: {e}")
+                print(f"Thread execution error: {e}")
     
     # Combine and save data
     if all_jobs_data:
@@ -89,9 +89,9 @@ def main():
         df.to_csv(output_filename, index=False, encoding='utf-8')
         
         # Print summary
-        print(f"✓ Combined data saved to: {output_filename}")
-        print(f"✓ Total jobs collected: {len(all_jobs_data)}")
-        print(f"✓ File size: {os.path.getsize(output_filename) / 1024:.1f} KB")
+        print(f" Combined data saved to: {output_filename}")
+        print(f" Total jobs collected: {len(all_jobs_data)}")
+        print(f" File size: {os.path.getsize(output_filename) / 1024:.1f} KB")
         
         # Print breakdown by source
         source_counts = df['source'].value_counts()
@@ -106,7 +106,7 @@ def main():
         print("=" * 60)
         
     else:
-        print("\n✗ No job data was collected from either portal.")
+        print("\n No job data was collected from either portal.")
         print("Please check the individual scraper outputs above for errors.")
 
 

@@ -191,7 +191,7 @@ class JoraCrawler(BaseCrawler):
                 WebDriverWait(driver, 15).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, "div.job-card.result"))
                 )
-                print(f"✓ Successfully navigated to page {page_number + 1}")
+                print(f" Successfully navigated to page {page_number + 1}")
                 return True
                 
             except Exception as e:
@@ -211,7 +211,7 @@ class JoraCrawler(BaseCrawler):
                     WebDriverWait(driver, 15).until(
                         EC.presence_of_element_located((By.CSS_SELECTOR, "div.job-card.result"))
                     )
-                    print(f"✓ Successfully navigated to page {page_number + 1} via URL")
+                    print(f" Successfully navigated to page {page_number + 1} via URL")
                     return True
                     
                 except Exception as url_error:

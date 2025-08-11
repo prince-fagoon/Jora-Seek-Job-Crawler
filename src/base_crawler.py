@@ -44,10 +44,10 @@ class BaseCrawler(ABC):
             print(f"Setting up Chrome driver for {self.portal_name}...")
             driver = webdriver.Chrome(options=options)
             driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-            print(f"✓ Chrome driver setup successful for {self.portal_name}")
+            print(f"Chrome driver setup successful for {self.portal_name}")
             return driver
         except Exception as e:
-            print(f"✗ Chrome driver setup failed for {self.portal_name}: {e}")
+            print(f"Chrome driver setup failed for {self.portal_name}: {e}")
             raise Exception(f"Could not setup Chrome driver for {self.portal_name}. Please ensure Chrome browser is installed and try again.")
 
     def wait_for_element(self, driver, selector, timeout=10):
@@ -83,11 +83,11 @@ class BaseCrawler(ABC):
             details['source'] = self.portal_name
             details['job_url'] = job_url
             
-            print(f"  ✓ Successfully scraped details for: {details['title'][:50]}...")
+            print(f"  Successfully scraped details for: {details['title'][:50]}...")
             return details
             
         except Exception as e:
-            print(f"  ✗ Error scraping job details: {e}")
+            print(f"  Error scraping job details: {e}")
             return {
                 'title': 'Error loading',
                 'company': 'N/A',
@@ -150,9 +150,9 @@ class BaseCrawler(ABC):
                 # Wait for job cards to load using portal-specific selector
                 try:
                     self.wait_for_job_cards()
-                    print("✓ Job cards loaded successfully")
+                    print("Job cards loaded successfully")
                 except Exception as e:
-                    print(f"✗ Timeout waiting for job cards: {e}")
+                    print(f"Timeout waiting for job cards: {e}")
                     break
                 
                 # Parse job cards
@@ -160,10 +160,10 @@ class BaseCrawler(ABC):
                 job_cards = self.get_job_cards(soup)
                 
                 if not job_cards:
-                    print("✓ No more job cards found. Ending scrape.")
+                    print("No more job cards found. Ending scrape.")
                     break
                 
-                print(f"✓ Found {len(job_cards)} jobs on page {page_number}.")
+                print(f"Found {len(job_cards)} jobs on page {page_number}.")
                 
                 # Process each job card
                 for i, card in enumerate(job_cards, 1):
@@ -191,7 +191,7 @@ class BaseCrawler(ABC):
                         }
                     
                     self.all_jobs_data.append(job_data)
-                    print(f"✓ Completed job {i}/{len(job_cards)}")
+                    print(f"Completed job {i}/{len(job_cards)}")
                 
                 # Navigate to next page
                 if page_number < max_pages:
@@ -200,14 +200,14 @@ class BaseCrawler(ABC):
                         break
                     page_number += 1
                 else:
-                    print(f"✓ Reached maximum pages limit ({max_pages}) for {self.portal_name}")
+                    print(f"Reached maximum pages limit ({max_pages}) for {self.portal_name}")
                     break
             
-            print(f"\n✓ {self.portal_name} scraping completed. Total jobs: {len(self.all_jobs_data)}")
+            print(f"\n{self.portal_name} scraping completed. Total jobs: {len(self.all_jobs_data)}")
             return self.all_jobs_data
             
         except Exception as e:
-            print(f"✗ An error occurred during {self.portal_name} scraping: {e}")
+            print(f"An error occurred during {self.portal_name} scraping: {e}")
             import traceback
             traceback.print_exc()
             return []
@@ -217,7 +217,7 @@ class BaseCrawler(ABC):
             if self.driver:
                 try:
                     self.driver.quit()
-                    print(f"✓ Browser closed successfully for {self.portal_name}")
+                    print(f"Browser closed successfully for {self.portal_name}")
                 except:
                     pass
 

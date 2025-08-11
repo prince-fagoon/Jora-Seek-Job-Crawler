@@ -122,9 +122,9 @@ class SeekCrawler(BaseCrawler):
             WebDriverWait(driver, 15).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='job-card']"))
             )
-            print("✓ Returned to search results page successfully")
+            print("Returned to search results page successfully")
         except TimeoutException:
-            print("✗ Timeout waiting for job cards after returning to search page")
+            print("Timeout waiting for job cards after returning to search page")
             return False
         
         try:
@@ -147,7 +147,7 @@ class SeekCrawler(BaseCrawler):
                 try:
                     next_button = driver.find_element(By.CSS_SELECTOR, selector)
                     if next_button and next_button.is_displayed():
-                        print(f"  ✓ Found next button with selector: {selector}")
+                        print(f" Found next button with selector: {selector}")
                         break
                 except:
                     continue
@@ -175,7 +175,7 @@ class SeekCrawler(BaseCrawler):
                     pass
             
             if next_button:
-                print(f"  ✓ Next button found: {next_button.get_attribute('aria-label')} - Enabled: {next_button.is_enabled()}")
+                print(f"Next button found: {next_button.get_attribute('aria-label')} - Enabled: {next_button.is_enabled()}")
                 if next_button.is_enabled():
                     try:
                         print(f"Clicking next button to go to page {page_number + 1}")
@@ -208,17 +208,17 @@ class SeekCrawler(BaseCrawler):
                             new_url = f"{base_search_url}?page={page_number + 1}"
                             driver.get(new_url)
                             time.sleep(random.uniform(2, 4))
-                            print(f"✓ Successfully navigated to page {page_number + 1}")
+                            print(f"Successfully navigated to page {page_number + 1}")
                             return True
                         except Exception as url_error:
                             print(f"Error with URL-based pagination: {url_error}")
                             return False
                 else:
-                    print("  ✗ Next button is disabled")
-                    print("✓ No more pages available")
+                    print(" Next button is disabled")
+                    print("No more pages available")
                     return False
             else:
-                print("  ✗ No next button found")
+                print(" No next button found")
                 # Debug: Show current URL and try to find any pagination elements
                 print(f"  Debug: Current URL: {driver.current_url}")
                 try:
@@ -228,7 +228,7 @@ class SeekCrawler(BaseCrawler):
                         print(f"    - {elem.get_attribute('data-automation')} | {elem.get_attribute('aria-label')}")
                 except:
                     pass
-                print("✓ No more pages available")
+                print("No more pages available")
                 return False
                 
         except Exception as e:
@@ -240,7 +240,7 @@ class SeekCrawler(BaseCrawler):
                 new_url = f"{base_search_url}?page={page_number + 1}"
                 driver.get(new_url)
                 time.sleep(random.uniform(2, 4))
-                print(f"✓ Successfully navigated to page {page_number + 1}")
+                print(f"Successfully navigated to page {page_number + 1}")
                 return True
             except Exception as url_error:
                 print(f"Error with URL-based pagination: {url_error}")
