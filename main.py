@@ -29,7 +29,7 @@ def main():
     print("STARTING JORA SCRAPING")
     print("=" * 60)
     try:
-        jora_jobs = jora_crawler.scrape_jobs(max_pages=2)
+        jora_jobs = jora_crawler.scrape_jobs(max_pages=1)
         if jora_jobs:
             all_jobs_data.extend(jora_jobs)
             print(f"✓ Jora scraping completed successfully. Jobs collected: {len(jora_jobs)}")
@@ -43,7 +43,7 @@ def main():
     print("STARTING SEEK SCRAPING")
     print("=" * 60)
     try:
-        seek_jobs = seek_crawler.scrape_jobs(max_pages=2)
+        seek_jobs = seek_crawler.scrape_jobs(max_pages=1)
         if seek_jobs:
             all_jobs_data.extend(seek_jobs)
             print(f"✓ Seek scraping completed successfully. Jobs collected: {len(seek_jobs)}")

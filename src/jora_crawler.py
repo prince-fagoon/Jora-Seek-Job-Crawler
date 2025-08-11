@@ -11,6 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import re
 import time
 import random
+from markdownify import markdownify as md
 
 
 class JoraCrawler(BaseCrawler):
@@ -95,11 +96,11 @@ class JoraCrawler(BaseCrawler):
         
         details['salary'] = salary
         
-        # Job description - using the correct selector from debug HTML
+        # Job description - convert HTML to Markdown
         desc_container = soup.select_one('#job-description-container')
         if desc_container:
-            # Get all text content from the description container
-            details['description'] = desc_container.get_text(strip=True)
+            html = desc_container.decode_contents()
+            details['description'] = md(html, heading_style="ATX").strip()
         else:
             details['description'] = "N/A"
         

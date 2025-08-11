@@ -12,6 +12,7 @@ from selenium.common.exceptions import TimeoutException
 import re
 import time
 import random
+from markdownify import markdownify as md
 
 
 class SeekCrawler(BaseCrawler):
@@ -99,7 +100,11 @@ class SeekCrawler(BaseCrawler):
             desc_elem = soup.select_one('[data-automation="jobDescription"]')
         if not desc_elem:
             desc_elem = soup.select_one('.job-description')
-        details['description'] = desc_elem.get_text(strip=True) if desc_elem else "N/A"
+        if desc_elem:
+            html = desc_elem.decode_contents()
+            details['description'] = md(html, heading_style="ATX").strip()
+        else:
+            details['description'] = "N/A"
         
         return details
     
