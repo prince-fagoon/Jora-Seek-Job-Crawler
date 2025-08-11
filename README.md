@@ -10,18 +10,6 @@ A modular job scraping system that collects sponsorship available jobs from mult
 - **Source Tracking**: Each job entry includes the source portal
 - **Robust Error Handling**: Continues scraping even if one portal fails
 
-## File Structure
-
-```
-Job-details-Jora-Seek/
-├── main.py                 # Entry point - run this to start scraping
-├── base_crawler.py         # Base crawler class with common functionality
-├── jora_crawler.py         # Jora.com specific crawler
-├── seek_crawler.py         # Seek.com.au specific crawler
-├── job_lists.csv           # Combined output file (generated)
-├── requirements.txt        # Python dependencies
-└── README.md              # This file
-```
 
 ## Installation
 
